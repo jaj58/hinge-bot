@@ -1,5 +1,4 @@
 //globals
-
 //direction and speeds
 byte left_direction = 13;
 byte right_direction = 12;
@@ -10,7 +9,6 @@ int trigger = 4;
 int echo = 2;
 //distance state (used for wall checks)
 int orig_state = 0;
-
 void setup() {
   // put your setup code here, to run once:
 
@@ -89,11 +87,11 @@ enum distance_states{
   RIGHT_BLOCKED,
   LEFT_BLOCKED
 };
-void nav_maze(){
+void auto_pilot(){
   switch(orig_state){
     case 0:
     robot_forwards();
-    if(sonar_distance() > 100){
+    if(sonar_distance() > 100){ //100 milimetres to object in front...
       robot_stop();
       robot_left();
       
@@ -110,7 +108,7 @@ void robot_left_degrees(float deg){
 
 void loop() {
   // put your main code here, to run repeatedly:
-  nav_maze();
+  auto_pilot();
 }
 
 
