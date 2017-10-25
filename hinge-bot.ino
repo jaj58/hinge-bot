@@ -1,4 +1,6 @@
 //globals
+//robot acceleration -> to be worked out...
+float robot_acceleration = 0.5; //m/s^2
 //direction and speeds
 byte left_direction = 13;
 byte right_direction = 12;
@@ -7,8 +9,6 @@ byte right_speed = 3;
 //sonar globals
 int trigger = 4;
 int echo = 2;
-//distance state (used for wall checks)
-int orig_state = 0;
 void setup() {
   // put your setup code here, to run once:
 
@@ -97,23 +97,49 @@ void robot_left_degrees(float deg){
   //todo: figure out a way to convert deg to delay time...
   //delay(...); 
 }
-enum distance_states{
-  FORWARD_CLEAR,
-  FORWARD_BLOCKED,
-  RIGHT_BLOCKED,
-  LEFT_BLOCKED
-};
+void robot_reverse_distance(float dist){
+  digitalWrite(left_direction, HIGH);
+  analogWrite(left_speed, 255);
+  digitalWrite(right_direction, HIGH);
+  analogWrite(right_speed, 255);
+  float time_to_delay = sqrt((2*dist)/robot_acceleration);
+  delay(time_to_delay);
+}
+
+float calc_distance_travelled(float t){
+  return (((t*t) * robot_acceleration) / 2); //using s= ut + 1/2 at^2 u=0 so s = ut^2 /2
+}
 void auto_pilot(){
-  switch(orig_state){
-    case FORWARD_CLEAR:
+    static float cur_time_travelled,old_time_travelled = 0; //s=d/t
+    start:
     robot_forwards();
-    if(sonar_distance() > 100){ //100 milimetres to object in front...
+    if(sonar_distance() > 50){ //50 milimetres to object in front...
       robot_stop();
-      robot_left();
-      
+      robot_left_degrees(90);
+      float left_dist = sonar_distance();
+      if(left_dist > 50){
+        goto start;
+        }else{
+          robot_right_degrees(180);
+          float right_dist = sonar_distance();
+          if(right_dist > 50){
+            goto start;
+          }
+          else{
+            /*
+            reached a dead end so we need to retrace our steps (started implementing this but still needs work,
+            we can takle this by taking the time we took to reach the turn and store each last 2 turns using old and
+            current values of time_travelled so we can retrace our steps calculate the distance we travelled using
+            this time and then we know the distance where the fork in the maze is, we then need to decide a formula
+            where every certain amount of milimetres we do a 180 and check for where the fork is, I haven't figured a 
+            effective way of doing that yet or if they will actually make the maze this hard....
+            */
+          }
+      }
     }
-    break;
-  }
+    else{
+      goto start;
+    }
 }
 
 void loop() {
