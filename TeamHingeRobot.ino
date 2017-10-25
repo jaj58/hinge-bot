@@ -14,7 +14,7 @@ int orig_state = 0;
 void setup() {
   // put your setup code here, to run once:
 
-  //direction and speeds
+  //directions
   pinMode(leftDirection, OUTPUT);
   pinMode(rightDirection, OUTPUT);
 
