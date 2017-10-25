@@ -89,7 +89,7 @@ enum distance_states{
 };
 void auto_pilot(){
   switch(orig_state){
-    case 0:
+    case FORWARD_CLEAR:
     robot_forwards();
     if(sonar_distance() > 100){ //100 milimetres to object in front...
       robot_stop();
