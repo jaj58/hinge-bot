@@ -81,6 +81,22 @@ float sonar_distance(){
   return sonar_to_distance(sonar_duration());
 }
 
+void robot_right_degrees(float deg){
+ digitalWrite(left_direction, HIGH);
+  analogWrite(left_speed, 255);
+  digitalWrite(right_direction, HIGH);
+  analogWrite(right_speed, 255);
+  //todo: figure out a way to convert deg to delay time...
+  //delay(...); 
+}
+void robot_left_degrees(float deg){
+  digitalWrite(left_direction, LOW);
+  analogWrite(left_speed, 255);
+  digitalWrite(right_direction, HIGH);
+  analogWrite(right_speed, 255);
+  //todo: figure out a way to convert deg to delay time...
+  //delay(...); 
+}
 enum distance_states{
   FORWARD_CLEAR,
   FORWARD_BLOCKED,
@@ -96,14 +112,8 @@ void auto_pilot(){
       robot_left();
       
     }
+    break;
   }
-}
-
-void robot_right_degrees(float deg){
-  
-}
-void robot_left_degrees(float deg){
-  
 }
 
 void loop() {
