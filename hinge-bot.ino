@@ -1,5 +1,5 @@
 //globals
-//robot acceleration -> to be worked out...
+//robot acceleration -> to be worked out (p.s 0.5 isn't probably anywhere near the actual robot acceleration just a value till we can work it out...
 float robot_acceleration = 0.5; //m/s^2
 //direction and speeds
 byte left_direction = 13;
@@ -102,7 +102,7 @@ void robot_reverse_distance(float dist){
   analogWrite(left_speed, 255);
   digitalWrite(right_direction, HIGH);
   analogWrite(right_speed, 255);
-  float time_to_delay = sqrt((2*dist)/robot_acceleration);
+  float time_to_delay = sqrt((2*dist)/robot_acceleration); //rearrange s=ut + 1/2 at^2 so we get t = sqrt(2dist/acceleration)
   delay(time_to_delay);
 }
 
@@ -111,21 +111,21 @@ float calc_distance_travelled(float t){
 }
 void auto_pilot(){
     static float cur_time_travelled,old_time_travelled = 0; //s=d/t
-    start:
+    start: //disgusting goto but it should in theory work and is quite simple anyway also this is over commented but makes sure everyone get's the idea behind it.
     robot_forwards();
-    if(sonar_distance() > 50){ //50 milimetres to object in front...
-      robot_stop();
+    if(sonar_distance() > 50){ //if there's a object less than 50 milimetres in front of us...
+      robot_stop(); 
       robot_left_degrees(90);
       float left_dist = sonar_distance();
-      if(left_dist > 50){
-        goto start;
-        }else{
+      if(left_dist > 50){ //check if the left of where we stopped is clear for more than 50 milimetres 
+        goto start; //repeat process
+        }else{ //technically right should be best option now since left and original forward aren't
           robot_right_degrees(180);
           float right_dist = sonar_distance();
-          if(right_dist > 50){
-            goto start;
+          if(right_dist > 50){ //check if right of where we stopped is clear for more than 50 milimetres
+            goto start;//repeat process
           }
-          else{
+          else{ //even right isn't clear so we are at a dead end
             /*
             reached a dead end so we need to retrace our steps (started implementing this but still needs work,
             we can takle this by taking the time we took to reach the turn and store each last 2 turns using old and
@@ -138,7 +138,7 @@ void auto_pilot(){
       }
     }
     else{
-      goto start;
+      goto start;//repeat process
     }
 }
 
