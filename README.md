@@ -1,0 +1,3 @@
+# hinge-bot
+small robot using an arduino uno...
+This is the main and simplest method for navigating the maze, essentially it is error proof since all it does is have a sensor on the left or right ( if we want) hand side of the robot and will follow the wall all the way till it reaches then end of the maze. This is simple and will always work but it may be slower than other methods hence the branches with different methods. Of course in real life we would just have a sensor on at least 3 sides so we can be more efficient and check all sides and even back if we watn 24/7 and figure out the best path because of this. 
