@@ -1,4 +1,4 @@
 # hinge-bot
 small robot using an arduino uno...
 
-(hinge-bot/concept.png)
+![alt text](concept.png "picture of the concept")
