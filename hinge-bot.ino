@@ -99,25 +99,24 @@ void robot_left_degrees(float deg){
   delay(time_to_delay);
   robot_stop();
 }
-enum distance_states{
-  FORWARD_CLEAR,
-  FORWARD_BLOCKED,
-  RIGHT_BLOCKED,
-  LEFT_BLOCKED
-};
+
 void auto_pilot(){
-    robot_forwards();
-    if(sonar_distance() > 100){ //100 milimetres to object in front...
-      robot_stop();
-      robot_left();
-      
+  if(sonar_distance() > 150){
+  robot_forwards();
+  else{
+    robot_left_degrees(60);
+    float left_dist = sonar_distance();
+    robot_right_degrees(120);
+    float right_dist = sonar_distance();
+    if(left_dist > right_dist){
+      robot_left_degrees(120);
     }
+  }
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  //auto_pilot();
-  
+  auto_pilot();
 }
 
 
