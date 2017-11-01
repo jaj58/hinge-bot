@@ -20,6 +20,9 @@ void setup() {
   Serial.begin(9600);
   pinMode(trigger, OUTPUT);
   pinMode(echo, INPUT);
+
+   Serial.print("finished setup");
+   robot_right_degrees(90);
 }
 
 void robot_reverse(){
@@ -82,20 +85,19 @@ float sonar_distance(){
 }
 
 void robot_right_degrees(float deg){
- digitalWrite(left_direction, HIGH);
-  analogWrite(left_speed, 255);
-  digitalWrite(right_direction, HIGH);
-  analogWrite(right_speed, 255);
-  //todo: figure out a way to convert deg to delay time...
-  //delay(...); 
+  robot_right();
+ //21seconds for 5 rotations 360 = 21/5 
+ //4.2 for 360
+  float time_to_delay = deg * (4100 /360);
+  delay(time_to_delay);
+  robot_stop();
 }
 void robot_left_degrees(float deg){
-  digitalWrite(left_direction, LOW);
-  analogWrite(left_speed, 255);
-  digitalWrite(right_direction, HIGH);
-  analogWrite(right_speed, 255);
-  //todo: figure out a way to convert deg to delay time...
-  //delay(...); 
+  robot_left();
+  //21seconds for 5 rotations 360 = 21/5 
+   float time_to_delay = deg * (4100 /360);
+  delay(time_to_delay);
+  robot_stop();
 }
 enum distance_states{
   FORWARD_CLEAR,
@@ -104,21 +106,18 @@ enum distance_states{
   LEFT_BLOCKED
 };
 void auto_pilot(){
-  switch(orig_state){
-    case FORWARD_CLEAR:
     robot_forwards();
     if(sonar_distance() > 100){ //100 milimetres to object in front...
       robot_stop();
       robot_left();
       
     }
-    break;
-  }
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  auto_pilot();
+  //auto_pilot();
+  
 }
 
 
