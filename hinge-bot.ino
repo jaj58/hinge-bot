@@ -12,7 +12,7 @@ int trigger = 4;
 int echo = 2;
 void setup() {
   // put your setup code here, to run once:
-
+delay(3000);
   //directions
   pinMode(left_direction, OUTPUT);
   pinMode(right_direction, OUTPUT);
