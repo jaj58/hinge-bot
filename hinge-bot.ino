@@ -103,6 +103,7 @@ void robot_left_degrees(float deg){
 void auto_pilot(){
   if(sonar_distance() > 150){
   robot_forwards();
+  }
   else{
     robot_left_degrees(60);
     float left_dist = sonar_distance();
