@@ -1,3 +1,5 @@
+#include <Servo.h>
+
 //globals
 //direction and speeds
 byte left_direction = 13;
@@ -9,6 +11,9 @@ int trigger = 4;
 int echo = 2;
 //distance state (used for wall checks)
 int orig_state = 0;
+//servo pin
+byte servo_pin = 7;
+Servo servo;
 void setup() {
   // put your setup code here, to run once:
 
@@ -21,8 +26,8 @@ void setup() {
   pinMode(trigger, OUTPUT);
   pinMode(echo, INPUT);
 
-   Serial.print("finished setup");
-   robot_right_degrees(90);
+  servo.attach(servo_pin);
+  Serial.print("finished setup");
 }
 
 void robot_reverse(){
@@ -99,8 +104,8 @@ void robot_left_degrees(float deg){
   delay(time_to_delay);
   robot_stop();
 }
-
-void auto_pilot(){
+/*
+void old_auto_pilot(){
   if(sonar_distance() > 150){
   robot_forwards();
   }
@@ -111,6 +116,31 @@ void auto_pilot(){
     float right_dist = sonar_distance();
     if(left_dist > right_dist){
       robot_left_degrees(120);
+    }
+  }
+}
+*/
+
+void auto_pilot(){
+ // auto servo_pos =  servo.read();
+ // servo.write(servo_pos - servo_pos); //setting servo to 0.
+  //Serial.print("servo pos : ");
+  //Serial.println(servo_pos);
+  //servo.write(90);
+  if(sonar_distance() > 150){
+    robot_forwards();
+  }
+  else{
+    servo.write(0);
+    delay(500);
+    auto left_dist = sonar_distance();
+    servo.write(270);
+    auto right_dist = sonar_distance();
+    if(left_dist > right_dist){
+      robot_left_degrees(90);
+    }
+    else{
+      robot_right_degrees(90);
     }
   }
 }
